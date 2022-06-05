@@ -1,0 +1,33 @@
+@media print {
+    body {
+        -webkit-print-color-adjust: exact;
+        padding-top: 20px;
+    }
+    
+    .header {
+        display: none;
+    }
+
+    .subTitle {
+        display: none;
+    }
+
+    .choiceName {
+        display: none;
+    }
+
+    .calendar__youbiContainer__youbi {
+        background-color: #005243;
+        color: #fff;
+    }
+
+    .today {
+        background-color: #fff;
+    }
+
+    .commentform {
+        display: none;
+    }
+
+
+}

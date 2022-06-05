@@ -1,0 +1,42 @@
+body {
+    font-family: 'Yu Gothic';
+    background-color: #fefefe;
+    padding-top: 130px;
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+.container {
+    margin-left: 35px;
+    margin-right: 35px;
+}
+
+.subTitle {
+    font-size: 20px;
+    margin-bottom: 30px;
+    border-bottom: 1px dotted #005243;
+}
+
+@media only screen and (max-width:480px) {
+    body {
+        padding-top: 90px;
+    }
+
+    .container {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+@import "_header.scss";
+@import "_hamburger.scss";
+
+@import "_calendar.scss";
+@import "_comment.scss";
+
+@import "_index.scss";
+@import "_detail.scss";
+
+@import "_shiftregist.scss";
+
+@import "_print.scss";

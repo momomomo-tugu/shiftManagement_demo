@@ -1,0 +1,34 @@
+.index {
+    &__linklist {
+        list-style: none;
+        display: flex;
+        margin-right: 25px;
+
+        &__linkbox {
+            &__link {
+                color: #fff;
+                text-decoration: none;
+                margin-left: 15px;
+            }
+
+            &__link:hover {
+                color: #e0e0e0;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width:480px) {
+    .index {
+        &__linklist {
+            display: none;
+            &__linkbox {
+                &__link {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+    

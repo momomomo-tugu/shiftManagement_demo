@@ -1,0 +1,45 @@
+.shift {
+    &__nameinput {
+        margin-bottom: 30px;
+
+        &__title {
+            margin-bottom: 10px;
+        }
+    }
+
+    &__shiftinput {
+        margin-bottom: 30px;
+
+        &__title {
+            margin-bottom: 10px;
+        }
+
+        &__day {
+            width: 40px;
+        }
+
+        &__container {
+            display: flex;
+        }
+
+        &__youbi {
+            margin-right: 20px;
+        }
+    }
+
+    &__timeinput {
+        margin-bottom: 30px;
+
+        &__container {
+            display: flex;
+
+            &__form {
+                width: 50px;
+            }
+
+            &__regular {
+                margin-left: 10px;
+            }
+        }
+    }
+}

@@ -1,0 +1,39 @@
+.choiceName {
+    display: flex;
+    margin-bottom: 20px;
+
+    &__choiceform {
+        width: 70px;
+        height: 30px;
+    }
+    
+    &__button {
+        height: 30px;
+        margin-left: 10px;
+        margin-bottom: 10px;
+    }
+}
+
+.shiftinfo {
+    margin-bottom: 10px;
+
+    &__temporary {
+        font-size: 10px;
+    }
+}
+
+.shiftinfo__time {
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+@media only screen and (max-width:480px) {
+    .shiftinfo__name {
+        font-size: 13px;
+    }
+
+    .shiftinfo__time {
+        white-space: normal;
+        // display: none;
+    }
+}
