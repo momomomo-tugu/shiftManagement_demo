@@ -394,6 +394,15 @@ body {
   margin-left: 10px;
 }
 
+.staffManagement {
+  margin-bottom: 30px;
+}
+
+.staffManagement__title {
+  font-weight: normal;
+  margin-bottom: 5px;
+}
+
 @media print {
   body {
     -webkit-print-color-adjust: exact;

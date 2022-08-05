@@ -1,19 +1,9 @@
 <?php
 
-class Itiran
+require_once('../../common.php');
+
+class Itiran extends Common
 {
-
-    function whoIs()
-    {
-        $pdo = new PDO('mysql:host=127.0.0.1;dbname=hoge;charset=utf8;', 'hogehoge', 'hogehogehoge');
-        return $pdo;
-    }
-
-    static function staticWhoIs()
-    {
-        $pdo = new PDO('mysql:host=127.0.0.1;dbname=hoge;charset=utf8;', 'hogehoge', 'hogehogehoge');
-        return $pdo;
-    }
 
     function commentRegist()
     {
@@ -41,7 +31,7 @@ class Itiran
         $allcomments = array();
         try {
             $pdo = self::staticWhoIs();
-            $stmt = $pdo->prepare('SELECT * FROM comments ORDER BY id DESC');
+            $stmt = $pdo->prepare('SELECT * FROM comments ORDER BY id DESC LIMIT 10');
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

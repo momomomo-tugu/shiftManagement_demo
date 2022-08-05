@@ -1,13 +1,9 @@
 <?php
 
-class DeleteShift
-{
+require_once('../../common.php');
 
-    function whoIs()
-    {
-        $pdo = new PDO('mysql:host=127.0.0.1;dbname=hoge;charset=utf8;', 'hogehoge', 'hogehogehoge');
-        return $pdo;
-    }
+class DeleteShift extends Common
+{
 
     function deleteShiftRegist()
     {

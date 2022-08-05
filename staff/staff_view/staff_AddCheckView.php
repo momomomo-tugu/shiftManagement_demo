@@ -1,10 +1,3 @@
-<?php
-function h($s)
-{
-    return htmlspecialchars($s, ENT_QUOTES);
-}
-?>
-
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -18,8 +11,8 @@ function h($s)
 
 <body>
     <?= $header ?>
-    <div class="container">
 
+    <div class="container">
         <?php
         if ($errorMessage !== '') {
             echo $errorMessage;
@@ -30,23 +23,12 @@ function h($s)
         <?php } else { ?>
             <p>
                 <?php
-                echo $whoisRegister[0]['name'] . 'さん';
+                echo $addStaff . 'さんを追加してよろしいですか？';
                 ?>
             </p>
-            <p>
-                <?php
-                echo h($delete_month) . "月" . h($delete_day) . "日";
-                ?>
-            </p>
-
-            <p>以上の内容を確認し、登録ボタンを押してください。</p>
-
-            <form action="../delete_controller/delete_Register.php" method="post">
-                <input type="hidden" name="delete_name" value="<?= $delete_name ?>">
-                <input type="hidden" name="delete_month" value="<?= $delete_month ?>">
-                <input type="hidden" name="delete_day" value="<?= $delete_day ?>">
+            <form action="../staff_controller/staff_AddRegister.php" method="post">
+                <input type="hidden" name="addStaff" value="<?= $addStaff ?>">
                 <input type="submit" value="登録">
-                <input type="button" onclick="history.back()" value="戻る">
             </form>
         <?php } ?>
     </div>
