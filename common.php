@@ -17,7 +17,7 @@ class Common
 
     function header()
     {
-        $header = <<<EOF
+        echo '
 
             <header class="header">
             <h1 class="header__title"><a href="../../itiran/itiran_controller/itiran_index.php" class="mainTitle">demoShift</a></h1>
@@ -51,8 +51,17 @@ class Common
             <!-- ハンバーガーメニュー -->
         </header>
 
-        EOF;
+        ';
+    }
 
-        return $header;
+    protected function prepareComment($name, $comment)
+    {
+        $all_staff = Staff::allStaff();
+        $key = array_search($name, array_column($all_staff, 'id'));
+        $regist_comment = $comment;
+        $system = new Itiran();
+        $system->name = $all_staff[$key]['name'];
+        $system->comment = $regist_comment;
+        $system->commentRegist();
     }
 }

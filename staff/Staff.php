@@ -10,8 +10,8 @@ class Staff extends Common
         // DB から staffs の内容をすべて引く
         $all_staff = array();
         try {
-            $pdo = self::staticWhoIs();
-            $stmt = $pdo->prepare('SELECT * FROM staffs');
+            $sql = 'SELECT * FROM staffs';
+            list($pdo, $stmt) = self::staticWhoIs($sql);
             $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 array_push($all_staff, $row);
@@ -27,9 +27,8 @@ class Staff extends Common
     {
         // staffs にスタッフを登録する
         try {
-            $pdo = $this->whoIs();
-            $stmt = $pdo->prepare('INSERT INTO staffs (name) VALUES (:NAME)');
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = 'INSERT INTO staffs (name) VALUES (:NAME)';
+            list($pdo, $stmt) = $this->whoIs($sql);
             $stmt->bindParam(':NAME', $this->name);
             return $stmt->execute();
         } catch (PDOException $e) {
@@ -42,8 +41,8 @@ class Staff extends Common
     {
         $target = array();
         try {
-            $pdo = self::staticWhoIs();
-            $stmt = $pdo->prepare('SELECT id FROM staffs WHERE name=:NAME');
+            $sql = 'SELECT id FROM staffs WHERE name=:NAME';
+            list($pdo, $stmt) = self::staticWhoIs($sql);
             $stmt->bindParam(':NAME', $name);
             $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -61,16 +60,16 @@ class Staff extends Common
     {
         // staffs からスタッフを削除、関連情報を削除
         try {
-            $pdo = $this->whoIs();
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $pdo->beginTransaction();
 
             $del_staffs  = 'DELETE FROM staffs       WHERE id  =:ID';
             $del_regular = 'DELETE FROM regularshift WHERE name=:ID';
             $del_day     = 'DELETE FROM dayshift     WHERE name=:ID';
             $del_delete  = 'DELETE FROM deleteshift  WHERE name=:ID';
 
-            $del_staffs_stmt = $pdo->prepare($del_staffs);
+            list($pdo, $stmt) = $this->whoIs($del_staffs);
+            $pdo->beginTransaction();
+
+            $del_staffs_stmt = $stmt;
             $del_staffs_stmt->bindParam(':ID', $this->id);
             $del_staffs_stmt->execute();
 
@@ -84,10 +83,11 @@ class Staff extends Common
 
             $del_delete_stmt = $pdo->prepare($del_delete);
             $del_delete_stmt->bindParam(':ID', $this->id);
+            $del_delete_stmt->execute();
 
             $pdo->commit();
 
-            return $del_delete_stmt->execute();
+            return true;
         } catch (PDOException $e) {
             $pdo->rollBack();
             var_dump($e);
@@ -99,8 +99,8 @@ class Staff extends Common
     {
         $whoisRegister = array();
         try {
-            $pdo = self::staticWhoIs();
-            $stmt = $pdo->prepare('SELECT * FROM staffs WHERE id=:ID');
+            $sql = 'SELECT * FROM staffs WHERE id=:ID';
+            list($pdo, $stmt) = self::staticWhoIs($sql);
             $stmt->bindParam(':ID', $id);
             $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

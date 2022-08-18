@@ -7,10 +7,10 @@ class StaffModel extends Common
 {
     function staffAddCheck()
     {
-        $header = $this->header();
+        $this->header();
         $addStaff = $_POST['addStaff'];
         if ($addStaff == "") {
-            $errorMessage = '! 未入力項目があります';
+            $errorMessage = '! 名前を入力してください';
         } else {
             $errorMessage = '';
         }
@@ -35,7 +35,7 @@ class StaffModel extends Common
 
     function staffDeleteCheck()
     {
-        $header = $this->header();
+        $this->header();
         $deleteStaff = $_POST['deleteStaff'];
         if ($deleteStaff == "") {
             $errorMessage = '! 未入力項目があります';
@@ -48,7 +48,6 @@ class StaffModel extends Common
     function staffDeleteRegister()
     {
         // スタッフ情報を削除
-        // $header = $this->header();
         $deleteStaff_name = $_POST['deleteStaff'];
 
         $deleteStaff_id = Staff::whatisId($deleteStaff_name);

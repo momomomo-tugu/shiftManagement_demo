@@ -11,7 +11,7 @@ class DayShiftModel extends Common
     function dayShiftDispView()
     {
         // dayShift_AddFormView を表示
-        $header = $this->header();
+        $this->header();
         $all_staff = Staff::allStaff();
         require_once('../dayShift_view/dayShift_AddFormView.php');
     }
@@ -19,7 +19,7 @@ class DayShiftModel extends Common
     function dayShiftRegisterCheck()
     {
         // 臨時シフト 登録内容確認
-        $header = $this->header();
+        $this->header();
         $dayshift_name = $_POST['dayshift_name'];
         $dayshift_month = $_POST['dayshift_month'];
         $dayshift_day = $_POST['dayshift_day'];
@@ -54,13 +54,7 @@ class DayShiftModel extends Common
         $dayshift->dayshift_times = $dayshift_times;
 
         if ($dayshift->dayShiftRegist()) {
-            $all_staff = Staff::allStaff();
-            $key = array_search($dayshift_name, array_column($all_staff, 'id'));
-            $regist_comment = '[system] 臨時シフトを登録しました';
-            $system = new Itiran();
-            $system->name = $all_staff[$key]['name'];
-            $system->comment = $regist_comment;
-            $system->commentRegist();
+            $this->prepareComment($dayshift_name, '[system] 臨時シフトを登録しました');
             header('Location: ../../itiran/itiran_controller/itiran_index.php');
         } else {
             echo '登録に失敗しました。';

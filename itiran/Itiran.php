@@ -10,11 +10,8 @@ class Itiran extends Common
         // コメントをDB に保存
         try {
             $commentInfo = array();
-            $pdo = $this->whoIs();
-            $stmt = $pdo->prepare('INSERT INTO comments (name, comment, dt) values ' .
-                ' (:NAME, :COMMENT, CURRENT_DATE)');
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+            $sql = 'INSERT INTO comments (name, comment, dt) VALUES (:NAME, :COMMENT, CURRENT_DATE)';
+            list($pdo, $stmt) = $this->whoIs($sql);
             $stmt->bindParam(':NAME', $this->name);
             $stmt->bindParam(':COMMENT', $this->comment);
             $commentInfo = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -30,9 +27,8 @@ class Itiran extends Common
         // DBからすべてのコメントを引いてくる
         $allcomments = array();
         try {
-            $pdo = self::staticWhoIs();
-            $stmt = $pdo->prepare('SELECT * FROM comments ORDER BY id DESC LIMIT 10');
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = 'SELECT * FROM comments ORDER BY id DESC LIMIT 10';
+            list($pdo, $stmt) = self::staticWhoIs($sql);
             $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 array_push($allcomments, $row);
@@ -44,33 +40,13 @@ class Itiran extends Common
         return $allcomments;
     }
 
-    static function allShift()
-    {
-        // staffs DBからすべてのシフト情報を引いてくる
-        $allshift = array();
-        try {
-            $pdo = self::staticWhoIs();
-            $stmt = $pdo->prepare('SELECT * FROM regularshift');
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $stmt->execute();
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                array_push($allshift, $row);
-            }
-        } catch (PDOException $e) {
-            var_dump($stmt);
-            return false;
-        }
-        return $allshift;
-    }
-
     static function itiranDetail($name)
     {
         // regularshift DBから詳細情報を引く
         $shift = array();
         try {
-            $pdo = self::staticWhoIs();
-            $stmt = $pdo->prepare('SELECT * FROM regularshift WHERE name=:NAME');
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = 'SELECT * FROM regularshift WHERE name=:NAME';
+            list($pdo, $stmt) = self::staticWhoIs($sql);
             $stmt->bindParam(':NAME', $name);
             $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -83,13 +59,30 @@ class Itiran extends Common
         return $shift;
     }
 
+    // static function itiranAll()
+    // {
+    //     $shiftAll = array();
+    //     try {
+    //         $pdo = self::staticWhoIs();
+    //         $stmt = $pdo->prepare('SELECT * FROM regularshift');
+    //         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    //         $stmt->execute();
+    //         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    //             array_push($shiftAll, $row);
+    //         }
+    //     } catch (PDOException $e) {
+    //         var_dump($stmt);
+    //         return false;
+    //     }
+    //     return $shiftAll;
+    // }
+
     static function itiranAll()
     {
         $shiftAll = array();
         try {
-            $pdo = self::staticWhoIs();
-            $stmt = $pdo->prepare('SELECT * FROM regularshift');
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = 'SELECT * FROM regularshift';
+            list($pdo, $stmt) = self::staticWhoIs($sql);
             $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 array_push($shiftAll, $row);
@@ -105,9 +98,8 @@ class Itiran extends Common
     {
         $dayshift = array();
         try {
-            $pdo = self::staticWhoIs();
-            $stmt = $pdo->prepare('SELECT * FROM dayshift WHERE name=:NAME');
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = 'SELECT * FROM dayshift WHERE name=:NAME';
+            list($pdo, $stmt) = self::staticWhoIs($sql);
             $stmt->bindParam(':NAME', $name);
             $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -124,9 +116,8 @@ class Itiran extends Common
     {
         $dayshift = array();
         try {
-            $pdo = self::staticWhoIs();
-            $stmt = $pdo->prepare('SELECT * FROM dayshift');
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = 'SELECT * FROM dayshift';
+            list($pdo, $stmt) = self::staticWhoIs($sql);
             $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 array_push($dayshift, $row);
@@ -142,9 +133,8 @@ class Itiran extends Common
     {
         $deleteshift = array();
         try {
-            $pdo = self::staticWhoIs();
-            $stmt = $pdo->prepare('SELECT * FROM deleteshift');
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = 'SELECT * FROM deleteshift';
+            list($pdo, $stmt) = self::staticWhoIs($sql);
             $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 array_push($deleteshift, $row);
@@ -160,9 +150,8 @@ class Itiran extends Common
     {
         $deleteshift = array();
         try {
-            $pdo = self::staticWhoIs();
-            $stmt = $pdo->prepare('SELECT * FROM deleteshift WHERE name=:NAME');
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = 'SELECT * FROM deleteshift WHERE name=:NAME';
+            list($pdo, $stmt) = self::staticWhoIs($sql);
             $stmt->bindParam(':NAME', $name);
             $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

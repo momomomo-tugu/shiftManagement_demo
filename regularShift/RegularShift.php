@@ -9,9 +9,8 @@ class RegularShift extends Common
     {
         $select = array();
         try {
-            $pdo = self::staticWhoIs();
-            $stmt = $pdo->prepare('SELECT * FROM regularshift WHERE name=:NAME');
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = 'SELECT * FROM regularshift WHERE name=:NAME';
+            list($pdo, $stmt) = self::staticWhoIs($sql);
             $stmt->bindParam(':NAME', $name);
             $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -28,8 +27,8 @@ class RegularShift extends Common
     {
         //週間シフトをDBに保存
         try {
-            $pdo = $this->whoIs();
-            $stmt = $pdo->prepare('INSERT INTO regularshift (name, regularshift, regularshift_times) VALUES (:NAME, :REGULARSHIFT, :REGULARSHIFT_TIMES)');
+            $sql = 'INSERT INTO regularshift (name, regularshift, regularshift_times) VALUES (:NAME, :REGULARSHIFT, :REGULARSHIFT_TIMES)';
+            list($pdo, $stmt) = $this->whoIs($sql);
             $stmt->bindParam(':NAME', $this->name);
             $stmt->bindParam(':REGULARSHIFT', $this->regularshift_day);
             $stmt->bindParam(':REGULARSHIFT_TIMES', $this->regularshift_times);
@@ -43,8 +42,8 @@ class RegularShift extends Common
     function regularShiftUpdate()
     {
         try {
-            $pdo = $this->whoIs();
-            $stmt = $pdo->prepare('UPDATE regularshift SET regularShift=:REGULARSHIFT, regularShift_times=:REGULARSHIFT_TIMES WHERE name=:NAME');
+            $sql = 'UPDATE regularshift SET regularShift=:REGULARSHIFT, regularShift_times=:REGULARSHIFT_TIMES WHERE name=:NAME';
+            list($pdo, $stmt) = $this->whoIs($sql);
             $stmt->bindParam(':NAME', $this->name);
             $stmt->bindParam(':REGULARSHIFT', $this->regularshift_day);
             $stmt->bindParam(':REGULARSHIFT_TIMES', $this->regularshift_times);

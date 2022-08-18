@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=yes, maximum-scale=1, minimum-scale=1">
-    <title>demoShift | 週間シフト追加</title>
+    <title>関根和三郎商店 | 週間シフト追加</title>
     <link rel="stylesheet" href="../../css/html5reset-1.6.1.css">
     <link rel="stylesheet" href="../../css/style.css">
 </head>
 
 <body>
-    <?= $header ?>
+
     <div class="container">
 
         <h2 class="subTitle">シフトを日時で追加</h2>

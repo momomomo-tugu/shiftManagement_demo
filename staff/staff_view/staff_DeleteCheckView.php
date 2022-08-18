@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=yes, maximum-scale=1, minimum-scale=1">
-    <title>demoShift | シフト削除確認</title>
+    <title>関根和三郎商店 | シフト削除確認</title>
     <link rel="stylesheet" href="../../css/html5reset-1.6.1.css">
     <link rel="stylesheet" href="../../css/style.css">
 </head>
 
 <body>
-    <?= $header ?>
+
 
     <div class="container">
         <?php

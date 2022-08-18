@@ -12,7 +12,7 @@ class ItiranModel extends Common
     {
         // IndexView
 
-        $header = $this->header();
+        $this->header();
 
         // カレンダー
         date_default_timezone_set('Asia/Tokyo');

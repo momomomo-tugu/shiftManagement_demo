@@ -10,7 +10,7 @@ class RegularShiftModel extends Common
 
     function regularShiftDispView()
     {
-        $header = $this->header();
+        $this->header();
         $all_staff = Staff::allStaff();
         require_once('../regularShift_view/regularShift_AddFormView.php');
     }
@@ -63,7 +63,7 @@ class RegularShiftModel extends Common
         $fin_hour_0 = $_POST['fin_hour_0'];
         $fin_minute_0 = $_POST['fin_minute_0'];
 
-        $header = $this->header();
+        $this->header();
 
         if ($regularshift_name === "-1") {
             $errorMessage = '! 未入力項目があります';
@@ -92,13 +92,7 @@ class RegularShiftModel extends Common
 
         if (empty($exist)) {
             if ($regularshift->regularShiftRegist()) {
-                $all_staff = Staff::allStaff();
-                $key = array_search($regularshift_name, array_column($all_staff, 'id'));
-                $regist_comment = '[system] 週間シフトを登録しました';
-                $system = new Itiran();
-                $system->name = $all_staff[$key]['name'];
-                $system->comment = $regist_comment;
-                $system->commentRegist();
+                $this->prepareComment($regularshift_name, '[system] 週間シフトを登録しました');
                 header('Location: ../../itiran/itiran_controller/itiran_index.php');
             } else {
                 echo '登録に失敗しました。';
@@ -106,13 +100,7 @@ class RegularShiftModel extends Common
             }
         } else {
             if ($regularshift->regularShiftUpdate()) {
-                $all_staff = Staff::allStaff();
-                $key = array_search($regularshift_name, array_column($all_staff, 'id'));
-                $regist_comment = '[system] 週間シフトを登録しました';
-                $system = new Itiran();
-                $system->name = $all_staff[$key]['name'];
-                $system->comment = $regist_comment;
-                $system->commentRegist();
+                $this->prepareComment($regularshift_name, '[system] 週間シフトを登録しました');
                 header('Location: ../../itiran/itiran_controller/itiran_index.php');
             } else {
                 echo '登録に失敗しました。';

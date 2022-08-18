@@ -10,7 +10,7 @@ class DeleteModel extends Common
 
     function deleteDispView()
     {
-        $header = $this->header();
+        $this->header();
         $all_staff = Staff::allStaff();
         require_once('../delete_view/delete_AddFormView.php');
     }
@@ -22,7 +22,7 @@ class DeleteModel extends Common
         $delete_month = $_POST['delete_month'];
         $delete_day = $_POST['delete_day'];
 
-        $header = $this->header();
+        $this->header();
 
         if ($delete_name === -1 || $delete_month === "0" || mb_strlen($delete_day) === 0) {
             $errorMessage = '! 未入力項目があります';
@@ -48,13 +48,7 @@ class DeleteModel extends Common
         $delete->delete_day = $delete_day;
 
         if ($delete->deleteShiftRegist()) {
-            $all_staff = Staff::allStaff();
-            $key = array_search($delete_name, array_column($all_staff, 'id'));
-            $regist_comment = '[system] シフトを削除しました';
-            $system = new Itiran();
-            $system->name = $all_staff[$key]['name'];
-            $system->comment = $regist_comment;
-            $system->commentRegist();
+            $this->prepareComment($delete_name, '[system] シフトを削除しました');
             header('Location: ../../itiran/itiran_controller/itiran_index.php');
         } else {
             echo '登録に失敗しました。';

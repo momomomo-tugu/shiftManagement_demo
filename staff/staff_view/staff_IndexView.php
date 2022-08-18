@@ -1,7 +1,7 @@
 <?php
 require_once('../../common.php');
 $common = new Common();
-$header = $common->header();
+$common->header();
 ?>
 
 <!DOCTYPE html>
@@ -10,14 +10,14 @@ $header = $common->header();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=yes, maximum-scale=1, minimum-scale=1">
-    <title>demoShift | シフト管理TOP</title>
+    <title>関根和三郎商店 | シフト管理TOP</title>
     <link rel="stylesheet" href="../../css/html5reset-1.6.1.css">
     <link rel="stylesheet" href="../../css/style.css">
 </head>
 
 <body>
 
-    <?= $header ?>
+
 
     <div class="container">
 

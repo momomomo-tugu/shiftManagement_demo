@@ -9,9 +9,8 @@ class DayShift extends Common
     {
         // 臨時シフトをDBに保存
         try {
-            $pdo = $this->whoIs();
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $stmt = $pdo->prepare('INSERT INTO dayshift (name, dayshift_month, dayshift_day, dayshift_times) VALUES (:NAME, :DAYSHIFT_MONTH, :DAYSHIFT_DAY, :DAYSHIFT_TIMES)');
+            $sql = 'INSERT INTO dayshift (name, dayshift_month, dayshift_day, dayshift_times) SELECT :NAME, :DAYSHIFT_MONTH, :DAYSHIFT_DAY, :DAYSHIFT_TIMES WHERE NOT EXISTS (SELECT * FROM dayshift WHERE name=:NAME AND dayshift_month=:DAYSHIFT_MONTH AND dayshift_day=:DAYSHIFT_DAY AND dayshift_times=:DAYSHIFT_TIMES)';
+            list($pdo, $stmt) = $this->whoIs($sql);
             $stmt->bindParam(':NAME', $this->dayshift_name);
             $stmt->bindParam(':DAYSHIFT_MONTH', $this->dayshift_month);
             $stmt->bindParam(':DAYSHIFT_DAY', $this->dayshift_day);

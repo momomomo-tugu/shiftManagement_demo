@@ -41,13 +41,12 @@ function deletedShift_individual($times)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=yes, maximum-scale=1, minimum-scale=1">
-    <title>demoShift | シフト管理TOP</title>
+    <title>関根和三郎商店 | シフト管理TOP</title>
     <link rel="stylesheet" href="../../css/html5reset-1.6.1.css">
     <link rel="stylesheet" href="../../css/style.css">
 </head>
 
 <body>
-    <?= $header ?>
 
     <div class="container">
 
@@ -109,249 +108,65 @@ function deletedShift_individual($times)
                         if ($currentmonth == $month && $day == $today) {
                     ?>
                             <td class="calendar__dayContainer__day today calendar__dayContainer__day__detail">
-                                <!-- 日付を出力 -->
-                                <?= $day; ?>
-                                <!-- 名前と時間 -->
-                                <div class="calendar__dayContainer__day__whois">
-                                    <?php
-                                    // 今日の日付__特定の人のシフト
-                                    if ($index_choiced_name != "0") {
-                                        // 今日の日付__特定の人のシフト__臨時シフト
-                                        foreach ($dayshift_list as $dayshift) {
-                                            $flag = 0;
-                                            parse_str($dayshift['dayshift_times'], $dayshift_times);
-                                            if (($regularshift_list[0]['name'] == $dayshift['name']) && ($month == $dayshift['dayshift_month']) && ($dayshift['dayshift_day'] == $day)) {
-                                                if (count($deleteshift_list) != 0) {
-                                                    foreach ($deleteshift_list as $deleteshift) {
-                                                        if (($month == $deleteshift['delete_month']) && ($day == $deleteshift['delete_day'])) {
-                                                            deletedShift(
-                                                                '×',
-                                                                $dayshift_times[0]
-                                                            );
-                                                            $flag = 1;
-                                                            break;
-                                                        }
-                                                    }
-                                                    if ($flag != 1) {
-                                                        scheduledShift(
-                                                            '〇',
+                            <?php } else { ?>
+                            <td class="calendar__dayContainer__day calendar__dayContainer__day__detail">
+                            <?php } ?>
+                            <?= $day ?>
+                            <div class="calendar__dayContainer__day__whois">
+                                <?php
+                                if (count($regularshift_list) == 1) {
+                                    // 特定の人のシフト
+                                    // 特定の人のシフト__臨時シフト
+                                    $status = array();
+                                    foreach ($dayshift_list as $dayshift) {
+                                        $flag = 0;
+                                        parse_str($dayshift['dayshift_times'], $dayshift_times);
+                                        if (
+                                            ($regularshift_list[0]['name'] == $dayshift['name']) &&
+                                            ($month == $dayshift['dayshift_month']) &&
+                                            ($dayshift['dayshift_day'] == $day)
+                                        ) {
+                                            $status[] = $regularshift_list[0]['name'];
+                                            if (count($deleteshift_list) != 0) {
+                                                foreach ($deleteshift_list as $deleteshift) {
+                                                    if (
+                                                        ($month == $deleteshift['delete_month']) &&
+                                                        ($day == $deleteshift['delete_day'])
+                                                    ) {
+                                                        deletedShift_individual(
                                                             $dayshift_times[0]
                                                         );
-                                                        $status[] = $regularshift_list[0]['name'];
+                                                        $flag = 1;
+                                                        break;
                                                     }
-                                                } else {
+                                                }
+                                                if ($flag != 1) {
                                                     scheduledShift(
                                                         '〇',
                                                         $dayshift_times[0]
                                                     );
                                                 }
-                                            }
-                                        }
-                                        // 今日の日付__特定の人のシフト__レギュラーシフト
-                                        $regularshift_array = explode(',', $regularshift_list[0]['regularshift']);
-                                        parse_str($regularshift_list[0]['regularshift_times'], $times);
-                                        foreach ($regularshift_array as $regularshift) {
-                                            $flag = 0;
-                                            if (in_array($regularshift_list[0]['name'], $status) == false) {
-                                                if ($day != '') {
-                                                    if ($weekdays[$regularshift] == $day) {
-                                                        if (count($deleteshift_list) != 0) {
-                                                            foreach ($deleteshift_list as $deleteshift) {
-                                                                if (($month == $deleteshift['delete_month']) && ($day == $deleteshift['delete_day'])) {
-                                                                    deletedShift_individual(
-                                                                        $times[$regularshift]
-                                                                    );
-                                                                    $flag = 1;
-                                                                    break;
-                                                                }
-                                                            }
-                                                            if ($flag != 1) {
-                                                                scheduledShift(
-                                                                    '〇',
-                                                                    $times[$regularshift]
-                                                                );
-                                                            }
-                                                        } else {
-                                                            scheduledShift(
-                                                                '〇',
-                                                                $times[$regularshift]
-                                                            );
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    } else {
-                                        // 全員分
-                                        // 今日の日付__全員分__臨時シフト
-                                        foreach ($dayshift_list as $dayshift) {
-                                            $flag = 0;
-                                            parse_str($dayshift['dayshift_times'], $dayshift_times);
-                                            if ($month == $dayshift['dayshift_month'] and $day == $dayshift['dayshift_day']) {
-                                                if (count($deleteshift_list) != 0) {
-                                                    foreach ($deleteshift_list as $deleteshift) {
-                                                        $key = array_search($dayshift['name'], array_column($all_staff, 'id'));
-                                                        if (($all_staff[$key]['id'] == $deleteshift['name']) && ($month == $deleteshift['delete_month']) && ($day == $deleteshift['delete_day'])) {
-                                                            deletedShift(
-                                                                $all_staff[$key]['name'],
-                                                                $dayshift_times[0]
-                                                            );
-                                                            $flag = 1;
-                                                            break;
-                                                        }
-                                                    }
-                                                    if ($flag != 1) {
-                                                        scheduledShift(
-                                                            $all_staff[$key]['name'],
-                                                            $dayshift_times[0]
-                                                        );
-                                                        $status[] = $key;
-                                                    }
-                                                } else {
-                                                    scheduledShift(
-                                                        $all_staff[$key]['name'],
-                                                        $dayshift_times[0]
-                                                    );
-                                                }
-                                            }
-                                        }
-                                        // 今日の日付__全員分__レギュラーシフト
-                                        foreach ($regularshift_list as $regularshift) {
-                                            $flag = 0;
-                                            $regularshift_all = explode(',', $regularshift['regularshift']);
-                                            parse_str($regularshift['regularshift_times'], $times);
-                                            foreach ($regularshift_all as $regularshift_day) {
-                                                $key = array_search($regularshift['name'], array_column($all_staff, 'id'));
-                                                if (in_array($key, $status) == false) {
-                                                    if ($day != '') {
-                                                        if ($regularshift_all[0] !== "") {
-                                                            if ($weekdays[$regularshift_day] == $day) {
-                                                                if (count($deleteshift_list) != 0) {
-                                                                    foreach ($deleteshift_list as $deleteshift) {
-                                                                        if (($all_staff[$key]['id'] == $deleteshift['name']) && ($month == $deleteshift['delete_month']) && ($day == $deleteshift['delete_day'])) {
-                                                                            deletedShift(
-                                                                                $all_staff[$key]['name'],
-                                                                                $times[$regularshift_day]
-                                                                            );
-                                                                            $flag = 1;
-                                                                            break;
-                                                                        }
-                                                                    }
-                                                                    if ($flag != 1) {
-                                                                        scheduledShift(
-                                                                            $all_staff[$key]['name'],
-                                                                            $times[$regularshift_day]
-                                                                        );
-                                                                    }
-                                                                } else {
-                                                                    scheduledShift(
-                                                                        $all_staff[$key]['name'],
-                                                                        $times[$regularshift_day]
-                                                                    );
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
+                                            } else {
+                                                scheduledShift(
+                                                    '〇',
+                                                    $dayshift_times[0]
+                                                );
                                             }
                                         }
                                     }
-                                    ?>
-                                </div>
-                            </td>
-                        <?php } else { ?>
-                            <!-- 今日の日付以外 -->
-                            <td class="calendar__dayContainer__day calendar__dayContainer__day__detail">
-                                <?php echo $day; ?>
-                                <div class="calendar__dayContainer__day__whois">
-                                    <?php
-                                    if (count($regularshift_list) == 1) {
-                                        // 今日の日付以外__特定の人のシフト
-                                        // 今日の日付以外__特定の人のシフト__臨時シフト
-                                        $status = array();
-                                        foreach ($dayshift_list as $dayshift) {
-                                            $flag = 0;
-                                            parse_str($dayshift['dayshift_times'], $dayshift_times);
-                                            if ($regularshift_list[0]['name'] == $dayshift['name']) {
-                                                if ($month == $dayshift['dayshift_month']) {
-                                                    if ($dayshift['dayshift_day'] == $day) {
-                                                        if (count($deleteshift_list) != 0) {
-                                                            foreach ($deleteshift_list as $deleteshift) {
-                                                                if (($month == $deleteshift['delete_month']) && ($day == $deleteshift['delete_day'])) {
-                                                                    deletedShift_individual(
-                                                                        $times[$regularshift]
-                                                                    );
-                                                                    $flag = 1;
-                                                                    break;
-                                                                }
-                                                            }
-                                                            if ($flag != 1) {
-                                                                scheduledShift(
-                                                                    '〇',
-                                                                    $dayshift_times[0]
-                                                                );
-                                                                $status[] = $regularshift_list[0]['name'];
-                                                            }
-                                                        } else {
-                                                            scheduledShift(
-                                                                '〇',
-                                                                $dayshift_times[0]
-                                                            );
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        // 今日の日付以外__特定の人のシフト__レギュラーシフト
-                                        $regularshift_array = explode(',', $regularshift_list[0]['regularshift']);
-                                        parse_str($regularshift_list[0]['regularshift_times'], $times);
-                                        foreach ($regularshift_array as $regularshift) {
-                                            $flag = 0;
-                                            if (in_array($regularshift_list[0]['name'], $status) == false) {
-                                                if ($day != '') {
-                                                    if ($weekdays[$regularshift] == $day) {
-                                                        if (count($deleteshift_list) != 0) {
-                                                            foreach ($deleteshift_list as $deleteshift) {
-                                                                if (($month == $deleteshift['delete_month']) && ($day == $deleteshift['delete_day'])) {
-                                                                    deletedShift_individual(
-                                                                        $times[$regularshift]
-                                                                    );
-                                                                    $flag = 1;
-                                                                    break;
-                                                                }
-                                                            }
-                                                            if ($flag != 1) {
-                                                                scheduledShift(
-                                                                    '〇',
-                                                                    $times[$regularshift]
-                                                                );
-                                                            }
-                                                        } else {
-                                                            scheduledShift(
-                                                                '〇',
-                                                                $times[$regularshift]
-                                                            );
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    } else {
-                                        // 全員分
-                                        // 今日の日付以外__全員分__臨時シフト
-                                        $status = array();
-                                        foreach ($dayshift_list as $dayshift) {
-                                            $flag = 0;
-                                            parse_str($dayshift['dayshift_times'], $dayshift_times);
-                                            if ($month == $dayshift['dayshift_month']) {
-                                                if ($dayshift['dayshift_day'] == $day) {
+                                    // 特定の人のシフト__レギュラーシフト
+                                    $regularshift_array = explode(',', $regularshift_list[0]['regularshift']);
+                                    parse_str($regularshift_list[0]['regularshift_times'], $times);
+                                    foreach ($regularshift_array as $regularshift) {
+                                        $flag = 0;
+                                        if (in_array($regularshift_list[0]['name'], $status) == false) {
+                                            if ($day != '') {
+                                                if ($weekdays[$regularshift] == $day) {
                                                     if (count($deleteshift_list) != 0) {
                                                         foreach ($deleteshift_list as $deleteshift) {
-                                                            $key = array_search($dayshift['name'], array_column($all_staff, 'id'));
-                                                            if (($all_staff[$key]['id'] == $deleteshift['name']) && ($month == $deleteshift['delete_month']) && ($day == $deleteshift['delete_day'])) {
-                                                                deletedShift(
-                                                                    $all_staff[$key]['name'],
-                                                                    $dayshift_times[0]
+                                                            if (($month == $deleteshift['delete_month']) && ($day == $deleteshift['delete_day'])) {
+                                                                deletedShift_individual(
+                                                                    $times[$regularshift]
                                                                 );
                                                                 $flag = 1;
                                                                 break;
@@ -359,57 +174,99 @@ function deletedShift_individual($times)
                                                         }
                                                         if ($flag != 1) {
                                                             scheduledShift(
-                                                                $all_staff[$key]['name'],
-                                                                $dayshift_times[0]
+                                                                '〇',
+                                                                $times[$regularshift]
                                                             );
-                                                            $status[] = $key;
                                                         }
                                                     } else {
                                                         scheduledShift(
-                                                            '<span class="shiftinfo__temporary">[臨]</span>' . $all_staff[$key]['name'],
-                                                            $dayshift_times[0]
+                                                            '〇',
+                                                            $times[$regularshift]
                                                         );
                                                     }
                                                 }
                                             }
                                         }
-                                        // 今日の日付以外__全員分__レギュラーシフト
-                                        foreach ($regularshift_list as $regularshift) {
-                                            $flag = 0;
-                                            $regularshift_all = explode(',', $regularshift['regularshift']);
-                                            parse_str($regularshift['regularshift_times'], $times);
-                                            foreach ($regularshift_all as $regularshift_day) {
-                                                $key = array_search($regularshift['name'], array_column($all_staff, 'id'));
-                                                if (in_array($key, $status) == false) {
-                                                    if ($day != '') {
-                                                        if ($regularshift_all[0] !== "") {
-                                                            if ($weekdays[$regularshift_day] == $day) {
-                                                                if (count($deleteshift_list) > 0) {
-                                                                    foreach ($deleteshift_list as $deleteshift) {
-                                                                        if (($all_staff[$key]['id'] == $deleteshift['name']) &&
-                                                                            ($month == $deleteshift['delete_month'])         &&
-                                                                            ($day == $deleteshift['delete_day'])
-                                                                        ) {
-                                                                            deletedShift(
-                                                                                $all_staff[$key]['name'],
-                                                                                $times[$regularshift_day]
-                                                                            );
-                                                                            $flag = 1;
-                                                                            break;
-                                                                        }
-                                                                    }
-                                                                    if ($flag != 1) {
-                                                                        scheduledShift(
+                                    }
+                                } else {
+                                    // 全員分
+                                    // 全員分__臨時シフト
+                                    $status = array();
+                                    foreach ($dayshift_list as $dayshift) {
+                                        $flag = 0;
+                                        parse_str($dayshift['dayshift_times'], $dayshift_times);
+                                        if (
+                                            $month == $dayshift['dayshift_month'] &&
+                                            $day == $dayshift['dayshift_day']
+                                        ) {
+                                            $key = array_search($dayshift['name'], array_column($all_staff, 'id'));
+                                            $status[] = $key;
+                                            if (count($deleteshift_list) != 0) {
+                                                foreach ($deleteshift_list as $deleteshift) {
+                                                    if (
+                                                        ($all_staff[$key]['id'] == $deleteshift['name']) &&
+                                                        ($month == $deleteshift['delete_month']) &&
+                                                        ($day == $deleteshift['delete_day'])
+                                                    ) {
+                                                        deletedShift(
+                                                            $all_staff[$key]['name'],
+                                                            $dayshift_times[0]
+                                                        );
+                                                        $flag = 1;
+                                                        break;
+                                                    }
+                                                }
+                                                if ($flag != 1) {
+                                                    scheduledShift(
+                                                        $all_staff[$key]['name'],
+                                                        $dayshift_times[0]
+                                                    );
+                                                }
+                                            } else {
+                                                scheduledShift(
+                                                    $all_staff[$key]['name'],
+                                                    $dayshift_times[0]
+                                                );
+                                            }
+                                        }
+                                    }
+                                    // 全員分__レギュラーシフト
+                                    foreach ($regularshift_list as $regularshift) {
+                                        $flag = 0;
+                                        $regularshift_all = explode(',', $regularshift['regularshift']);
+                                        parse_str($regularshift['regularshift_times'], $times);
+                                        foreach ($regularshift_all as $regularshift_day) {
+                                            $key = array_search($regularshift['name'], array_column($all_staff, 'id'));
+                                            if (in_array($key, $status) == false) {
+                                                if ($day != '') {
+                                                    if ($regularshift_all[0] !== "") {
+                                                        if ($weekdays[$regularshift_day] == $day) {
+                                                            if (count($deleteshift_list) > 0) {
+                                                                foreach ($deleteshift_list as $deleteshift) {
+                                                                    if (
+                                                                        ($all_staff[$key]['id'] == $deleteshift['name']) &&
+                                                                        ($month == $deleteshift['delete_month'])         &&
+                                                                        ($day == $deleteshift['delete_day'])
+                                                                    ) {
+                                                                        deletedShift(
                                                                             $all_staff[$key]['name'],
                                                                             $times[$regularshift_day]
                                                                         );
+                                                                        $flag = 1;
+                                                                        break;
                                                                     }
-                                                                } else {
+                                                                }
+                                                                if ($flag != 1) {
                                                                     scheduledShift(
                                                                         $all_staff[$key]['name'],
                                                                         $times[$regularshift_day]
                                                                     );
                                                                 }
+                                                            } else {
+                                                                scheduledShift(
+                                                                    $all_staff[$key]['name'],
+                                                                    $times[$regularshift_day]
+                                                                );
                                                             }
                                                         }
                                                     }
@@ -417,11 +274,13 @@ function deletedShift_individual($times)
                                             }
                                         }
                                     }
-                                    ?>
-                                </div>
+                                ?>
+                            </div>
                             </td>
-                    <?php }
-                    } ?>
+                    <?php
+                                }
+                            }
+                    ?>
                 </tr>
             <?php } ?>
         </table>
